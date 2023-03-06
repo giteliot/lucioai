@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PyTorch Application</title>
+    <title>LucioAI</title>
 </head>
 <body>
-    <h1>Train Your Doggo</h1>
-    <form action="/predict" method="POST">
-        <label for="input">Enter Input:</label><br>
-        <input type="text" id="input" name="input"><br>
-        <br>
-        <input type="submit" value="Submit">
+    <h1>LucioAI</h1><img src="{{ url_for('static', filename='lucio_icon.jpg') }}" width="256px" height="256px">
+    <form action="/command" method="POST">
+        <label for="input">Give command to litle Lucio:</label><br>
+        <input type="text" id="input" name="input"><input type="submit" value="GO">
     </form>
+    <p>{{ action }}</p>
 </body>
 </html>
 
