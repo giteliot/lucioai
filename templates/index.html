@@ -10,6 +10,13 @@
         <input type="text" id="input" name="input"><input type="submit" value="GO">
     </form>
     <p>{{ action }}</p>
+    {% if action %}
+        <button onclick="reward(true)">Give Treat</button>
+        <button onclick="reward(false)">Beat Mercilessly</button>
+    {% endif %}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
 </body>
 </html>
 

@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template
+from model.dog import get_random_seq
 import torch
 
 app = Flask(__name__)
@@ -16,7 +17,7 @@ def postprocess_output(output_tensor):
 
 
 def process_input(input_data):
-    return "BAU"
+    return get_random_seq()
 
 
 # Define the route for the index page
