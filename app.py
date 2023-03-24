@@ -1,9 +1,22 @@
 from flask import Flask, request, render_template
-from model.dog import get_random_seq
+from model.dog import Dog
 import torch
 
 app = Flask(__name__)
 model = None  # we'll load the model later
+num_possible_commands = 10
+
+moves = {
+    "STAYING AS IT IS",
+    "GOING UP AND UP AND UP",
+    "ROLLING LEFT",
+    "ROLLING RIGHT",
+    "GOING DOWN ON THE FLOOR",
+    "STANDING",
+    "SITTING"
+}
+
+dog = Dog(moves, num_possible_commands)
 
 
 def preprocess_input(input_data):
@@ -30,12 +43,12 @@ def index():
 @app.route('/command', methods=['POST'])
 def predict():
     input_data = request.form['input']
-    output_action = process_input(input_data)
+    dog.update_vocabulary(input_data)
+    output_action = dog.predict(input_data)
     return render_template('index.html', input_text=input_data, action=output_action)
 
 
 if __name__ == '__main__':
     # Load the model
-    # model = torch.load('model.pth', map_location=torch.device('cpu'))
-    # Start the Flask app
+    model = torch.load('model.pth', map_location=torch.device('cpu'))
     app.run(debug=True)

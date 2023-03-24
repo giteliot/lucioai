@@ -1,47 +1,40 @@
 import random
 from model.model import LSTM
+import torch.nn as nn
+from torch.nn import functional as F
 import torch
-
-moves = {
-    "STOP",
-    "STAY",
-    "UP",
-    "LEFT",
-    "RIGHT",
-    "DOWN",
-    "STAND",
-    "SIT"
-}
-
-itom = {i: m for i, m in enumerate(moves)}
-mtoi = {m: i for i, m in enumerate(moves)}
+import numpy as np
 
 
 class Dog:
-    def __init__(self):
+    def __init__(self, moves, num_possible_commands):
         self.device = torch.device('cpu')
-        self.model = LSTM(4, 2, len(moves)).to(self.device)
+        self.moves = moves
+        self.commands = set()
+        self.max_commands = num_possible_commands
+        self.itom = {i: m for i, m in enumerate(moves)}
+        self.mtoi = {m: i for i, m in enumerate(moves)}
+        self.model = LSTM(num_possible_commands, 2, len(moves)).to(self.device)
 
-    def predict(self, text, temperature=0.8):
-        model.eval()
+    def update_vocabulary(self, word):
+        if word in self.commands:
+            return 0
+        self.mtoi[word] = len(self.moves)
+        self.itom[len(self.moves)] = word
+        self.commands.add(word)
+
+        print(self.mtoi)
+        print(self.itom)
+        return 1
+
+    def predict(self, command, temperature=0.8):
+        self.model.eval()
         with torch.no_grad():
             hidden = None
-            for char in text:
-                x = torch.zeros(1, 1, input_size).to(device)
-                x[0, 0, char_to_idx[char]] = 1
-                output, hidden = self.model(x, hidden)
+            x = torch.zeros(1, 1, self.max_commands).to(self.device)
+            x[0, 0, self.mtoi[command]] = 1
+            output, hidden = self.model(x, hidden)
             preds = nn.functional.softmax(output / temperature, dim=-1).squeeze().cpu().numpy()
             next_char = np.random.choice(len(preds), p=preds)
-            return idx_to_char[next_char]
+            return self.itom[next_char]
 
-
-def get_random_action():
-    return itom[random.randint(0, len(moves)-1)]
-
-
-def get_random_seq():
-    r = get_random_action()
-    print(r)
-    if r == "STOP":
-        return [r]
-    return [r]+get_random_seq()
