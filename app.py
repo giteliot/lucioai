@@ -48,6 +48,15 @@ def predict():
     return render_template('index.html', input_text=input_data, action=output_action)
 
 
+@app.route('/train', methods=['POST'])
+def train():
+    action = request.form['action']
+    reward = request.form['reward']
+
+    dog.learn(action, reward)
+    return "OK"
+
+
 if __name__ == '__main__':
     # Load the model
     model = torch.load('model.pth', map_location=torch.device('cpu'))

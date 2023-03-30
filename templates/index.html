@@ -11,8 +11,8 @@
     </form>
     <p>{{ action }}</p>
     {% if action %}
-        <button onclick="reward(true)">Give Treat</button>
-        <button onclick="reward(false)">Beat Mercilessly</button>
+        <button onclick="reward('{{ action }}', true)">Give Treat</button>
+        <button onclick="reward('{{ action }}', false)">Beat Mercilessly</button>
     {% endif %}
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
