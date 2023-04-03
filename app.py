@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template
 from model.dog import Dog
 import torch
+import json
 
 app = Flask(__name__)
 model = None  # we'll load the model later
@@ -44,8 +45,8 @@ def index():
 def predict():
     input_data = request.form['input']
     dog.update_vocabulary(input_data)
-    output_action = dog.predict(input_data)
-    return render_template('index.html', input_text=input_data, action=output_action)
+    output_action, full_output = dog.predict(input_data)
+    return render_template('index.html', input_text=input_data, action=output_action, output=json.dumps(full_output))
 
 
 @app.route('/train', methods=['POST'])

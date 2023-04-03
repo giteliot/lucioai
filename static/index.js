@@ -1,5 +1,4 @@
 function reward(action, isPositive) {
-    console.log('action '+action);
     console.log('is reward positive? '+isPositive);
 
     reward = isPositive == true ? 10 : -1;
@@ -10,6 +9,6 @@ function reward(action, isPositive) {
     data: {action: action, reward: reward},
     success: function(response) {
         console.log(response);
-    }
-});
+        }
+    });
 }
