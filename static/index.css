@@ -1,0 +1,19 @@
+.title {
+	text-align: center;
+}
+
+.command-input {
+	display: block;
+    margin: 2%;
+    width: 96%;
+    font-size: 18px;
+}
+
+.lucio-img {
+  display: block;
+  margin: 0 auto;
+  height: 40vh;
+  width: 40vh;
+  max-width: 100%;
+  object-fit: contain;
+}

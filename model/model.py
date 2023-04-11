@@ -1,23 +1,18 @@
 import torch
 import torch.nn as nn
-import string
+import torch.optim as optim
 
-
-# Define the LSTM language model
-class LSTM(nn.Module):
+# Define the neural network architecture
+class Net(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
-        super(LSTM, self).__init__()
-        self.hidden_size = hidden_size
-        self.lstm = nn.LSTM(input_size, hidden_size, batch_first=True)
-        self.fc = nn.Linear(hidden_size, output_size)
+        super(Net, self).__init__()
+        self.fc1 = nn.Linear(input_size, hidden_size)
+        self.relu = nn.ReLU()
+        self.fc2 = nn.Linear(hidden_size, output_size)
 
-    def forward(self, x, hidden=None):
-        if hidden is None:
-            h0 = torch.zeros(1, x.size(0), self.hidden_size).to(x.device)
-            c0 = torch.zeros(1, x.size(0), self.hidden_size).to(x.device)
-        else:
-            h0, c0 = hidden
-        output, (hn, cn) = self.lstm(x, (h0, c0))
-        output = self.fc(output[:, -1, :])
-        return output, (hn, cn)
-
+    def forward(self, x):
+        out = self.fc1(x)
+        out = self.relu(out)
+        out = self.fc2(out)
+        out = nn.functional.softmax(out, dim=-1).squeeze()
+        return out

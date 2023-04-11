@@ -8,12 +8,10 @@ model = None  # we'll load the model later
 num_possible_commands = 10
 
 moves = {
-    "STAYING AS IT IS",
     "GOING UP AND UP AND UP",
     "ROLLING LEFT",
     "ROLLING RIGHT",
     "GOING DOWN ON THE FLOOR",
-    "STANDING",
     "SITTING"
 }
 
@@ -43,18 +41,19 @@ def index():
 # Define the route for the model prediction
 @app.route('/command', methods=['POST'])
 def predict():
-    input_data = request.form['input']
+    input_data = request.form['command']
     dog.update_vocabulary(input_data)
-    output_action, full_output = dog.predict(input_data)
-    return render_template('index.html', input_text=input_data, action=output_action, output=json.dumps(full_output))
+    output_action = dog.predict(input_data)
+    return render_template('index.html', command=input_data, action=output_action)
 
 
 @app.route('/train', methods=['POST'])
 def train():
+    command = request.form['command']
     action = request.form['action']
     reward = request.form['reward']
 
-    dog.learn(action, reward)
+    dog.learn(command, action, reward)
     return "OK"
 
 

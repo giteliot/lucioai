@@ -2,17 +2,16 @@
 <html>
 <head>
     <title>LucioAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
 </head>
 <body>
-    <h1>LucioAI</h1><img src="{{ url_for('static', filename='lucio_icon.jpg') }}" width="256px" height="256px">
-    <form action="/command" method="POST">
-        <label for="input">Give command to litle Lucio:</label><br>
-        <input type="text" id="input" name="input"><input type="submit" value="GO">
-    </form>
+    <h1 class="title">LucioAI</h1>
+    <img class="lucio-img" src="{{ url_for('static', filename='lucio_base.png') }}" width="300px" height="300px">
+    <input class="command-input" type="text" id="input" name="input" placeholder="give command to litle lucio" onkeydown="handleKeyDown(event)">
     <p>{{ action }}</p>
     {% if action %}
-        <button onclick="reward('{{ action }}', true)">Give Treat</button>
-        <button onclick="reward('{{ action }}', false)">Beat Mercilessly</button>
+        <button onclick="reward('{{ command }}', '{{ action }}', true)">Give Treat</button>
+        <button onclick="reward('{{ command }}', '{{ action }}', false)">Beat Mercilessly</button>
     {% endif %}
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
