@@ -10,6 +10,8 @@ from model.memory import Memory
 
 _LIVE_LEARNING_RATE = 0.05
 _MEMORY_LEARNING_RATE = 0.01
+_GOOD_REWARD = 10
+_BAD_REWARD = 5
 
 
 class Dog:
@@ -45,10 +47,15 @@ class Dog:
             next_move = torch.multinomial(output, 1)
             return self.itom[next_move.item()]
 
-    def learn(self, command, action, reward):    
+    def learn(self, command, action, reward):
+        reward = int(reward)
+        if reward > 0:
+            reward = reward*_GOOD_REWARD
+        else:
+            reward = reward*_BAD_REWARD 
         optimizer = optim.Adam(self.model.parameters(), lr=_LIVE_LEARNING_RATE)
         action_t = torch.tensor(self.mtoi[action], dtype=torch.long)
-        reward_t = torch.tensor(int(reward), dtype=torch.float)
+        reward_t = torch.tensor(reward, dtype=torch.float)
 
         self.memory.push(self._get_input(command), action_t, reward_t)
         output_prob = self.model(self._get_input(command))
@@ -65,4 +72,3 @@ class Dog:
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-

@@ -2,20 +2,21 @@
 <html>
 <head>
     <title>LucioAI</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 </head>
 <body>
     <h1 class="title">LucioAI</h1>
-    <img class="lucio-img" src="{{ url_for('static', filename='lucio_base.png') }}" width="300px" height="300px">
-    <input class="command-input" type="text" id="input" name="input" placeholder="give command to litle lucio" onkeydown="handleKeyDown(event)">
-    <p>{{ action }}</p>
-    {% if action %}
-        <button onclick="reward('{{ command }}', '{{ action }}', true)">Give Treat</button>
-        <button onclick="reward('{{ command }}', '{{ action }}', false)">Beat Mercilessly</button>
-    {% endif %}
+    <img class="lucio-img" src="{{ url_for('static', filename='images/lucio_base.png') }}" width="300px" height="300px">
+    <input class="command-input" type="text" id="cmd-input" name="input" placeholder="give command to litle lucio" onkeydown="handleKeyDown(event)">
+    <button onclick="startListening()">TRAING</button>
+    <button onclick="stopAudioCapture()">STAHP</button>
+    <div class="output">
+      <button onclick="reward(true)" class="green-button"></button>
+      <button onclick="reward(false)" class="red-button"></button>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{ url_for('static', filename='index.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vad.js') }}"></script>
 </body>
 </html>
-

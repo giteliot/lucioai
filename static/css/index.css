@@ -1,0 +1,43 @@
+.title {
+	text-align: center;
+}
+
+.command-input {
+	display: block;
+    margin: 2%;
+    width: 95%;
+    font-size: 18px;
+}
+
+.lucio-img {
+  display: block;
+  margin: 0 auto;
+  height: 40vh;
+  width: 40vh;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.output {
+  display: flex;
+}
+
+.green-button {
+  background-color: darkgreen; 
+  color: white; 
+  margin-left: 2%; 
+  margin-right: 1%; 
+  border: none; 
+  width: 47%;
+  height: 48px;
+}
+
+.red-button {
+  background-color: #ba1d22; 
+  color: white; 
+  margin-right: 2%; 
+  margin-left: 1%; 
+  border: none;
+  width: 47%;
+  height: 48px;
+}
