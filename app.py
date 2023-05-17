@@ -9,10 +9,9 @@ num_possible_commands = 10
 
 moves = {
     "JUMP",
-    "ROLLING_LEFT",
-    "ROLLING_RIGHT",
     "CROUCH",
-    "SIT"
+    "SIT",
+    "WALK"
 }
 
 dog = Dog(moves, num_possible_commands)

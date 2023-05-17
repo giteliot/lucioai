@@ -1,0 +1,16 @@
+TODO.txt
+
+UI:
+- training room background image
+- new doggo/animations
+- happy doggo/sad doggo images
+- new interface layout and font
+
+Audio:
+- default GOOD BOY/ BAD BOY from Audio
+
+Game:
+- what game?
+
+Cool Stuff:
+- no pre-digestion of audio? Straight into the Model?

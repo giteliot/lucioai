@@ -1,10 +1,12 @@
 $('.output').hide()
+resetInterface()
 let command;
 let action;
 let shouldRecord = false;
 let isSpeaking = false;
 let commands = {}
-const THRESHOLD_SIMILARITY = 25;
+let testWaves = [];
+const THRESHOLD_SIMILARITY = 0.001;
 
 function reward(isPositive) {
     reward_value = isPositive == true ? 1 : -1;
@@ -20,32 +22,8 @@ function reward(isPositive) {
             $('.command-input').val("");
         }
     });
-}
-
-function showAction(action) {
-    console.log(action)
-    const img = $(".lucio-img");
-
-    img.attr("src", `static/images/${action}.gif`);
-    setTimeout(() => {img.attr("src", `static/images/lucio_base.png`);}, 1200) 
-}
-
-
-function handleKeyDown(event) {
-
-    if (event.keyCode === 13 && !action) { // 13 is the code for "Enter" key
-      event.preventDefault(); // prevent the default behavior of the "Enter" key
-      $.ajax({
-      url: '/command',
-      method: 'GET',
-      data: {command: $('.command-input').val()},
-      success: function(response) {
-        action = response;
-        $('.output').show()
-        showAction(response)
-        }
-      });
-    }
+    shouldRecord = true;
+    showReady();
 }
 
 function getEnergy(buffer) {
@@ -66,7 +44,13 @@ function normalizeWave(wave) {
     return wave.map((x) => (x - mean) / standardDeviation);
 }
 
-function getWaveSimilarity(x, y) {
+function getWaveMetric(wave) {
+    const sum = wave.reduce((acc, cur) => acc + cur, 0);
+    const mean = sum / wave.length;
+    return wave.reduce((acc, cur) => acc + Math.pow(cur - mean, 2), 0) / (wave.length*wave.length);
+}
+
+function OLDgetWaveSimilarity(x, y) {
     // Normalize the waveforms
     let x_mean = x.reduce((a, b) => a + b) / x.length;
     let y_mean = y.reduce((a, b) => a + b) / y.length;
@@ -88,6 +72,10 @@ function getWaveSimilarity(x, y) {
     return corr[corr.indexOf(Math.max(...corr))];
 }
 
+function getWaveSimilarity(x, y) {
+    return Math.abs(x-y);
+}
+
 function findSimilarCommand(targetWave) {
     let selectedCmd;
     let maxSimilarity = THRESHOLD_SIMILARITY;
@@ -95,7 +83,7 @@ function findSimilarCommand(targetWave) {
         let avgSimilarity = waves.map((w) => getWaveSimilarity(w, targetWave))
             .reduce((x,y) => x+y)/waves.length;
 
-        if (avgSimilarity > maxSimilarity) {
+        if (avgSimilarity <= maxSimilarity) {
             selectedCmd = cmd;
             maxSimilarity = avgSimilarity;
         }
@@ -106,7 +94,9 @@ function findSimilarCommand(targetWave) {
 
 
 function updateAndGetNewCommand(wave) {
-    wave = normalizeWave(wave);
+    wave = getWaveMetric(normalizeWave(wave));
+    // testWaves.push(wave);
+    console.log(wave);
 
     let memeorizedCommands = 0;
     for (let key in commands) {
@@ -118,7 +108,7 @@ function updateAndGetNewCommand(wave) {
     console.log(`used commands = ${numCommands}`)
 
     if (numCommands < 1) {
-        console.log("1- CMD1 CASE")
+        console.log(`1- CMD1 CASE: COMMAND1`)
         command = "COMMAND1"; 
         commands[command] = [wave];
         return command;
@@ -126,18 +116,18 @@ function updateAndGetNewCommand(wave) {
     
     let similarCommand = findSimilarCommand(wave);
     if (similarCommand != undefined) {
-        console.log("2- SIMILAR CASE")
+        console.log(`2- SIMILAR CASE: ${similarCommand}`)
         commands[similarCommand].push(wave);
         return similarCommand;
     }
 
     if (numCommands < 5) {
-        console.log("3- NEW CMD CASE")
+        console.log(`3- NEW CMD CASE: COMMAND${numCommands+1}`)
         command = "COMMAND"+(numCommands+1); 
         commands[command] = [wave];
         return command;
     }
-    console.log("4-REPLACE CMD CASE")
+
     let minKey;
     let minVal;
     for (let key in commands) {
@@ -153,10 +143,16 @@ function updateAndGetNewCommand(wave) {
             minVal = curVal;
         }
     }
+
+    command = minKey;
+    command[minKey] = [wave];
+    console.log(`3- NEW CMD CASE: ${command}`)
+    return command;
 }
     
 
 async function startListening() {
+    showReady();
     shouldRecord = true;
     let wave = []
     const audioContext = new AudioContext();
@@ -171,7 +167,7 @@ async function startListening() {
     const dataArray = new Uint8Array(bufferLength);
 
     function processAudio() {
-        if (isSpeaking == true) {
+        if (isSpeaking == true && shouldRecord == true) {
             analyserNode.getByteTimeDomainData(dataArray);
             wave.push(getEnergy(dataArray));
             requestAnimationFrame(processAudio);
@@ -179,17 +175,22 @@ async function startListening() {
     }
 
     function voiceStart() {
-        if (shouldRecord == true) {
-            console.log('voice_start');
-            wave = [];
-            isSpeaking = true;
-            requestAnimationFrame(processAudio);
-        }
+        if (shouldRecord == false) return;
+
+        $('#record-screen').show();
+        console.log('voice_start');
+        wave = [];
+        isSpeaking = true;
+        requestAnimationFrame(processAudio);
     }
 
     function voiceStop() {
+        if (shouldRecord == false) return;
+
+        $('#record-screen').hide();
         console.log('voice_stop');
         isSpeaking = false;
+        shouldRecord = false;
         command = updateAndGetNewCommand(wave);
         console.log(`IN: ${command}`);
 
@@ -200,15 +201,15 @@ async function startListening() {
           success: function(response) {
             action = response;
             console.log(`OUT: ${action}`);
-            $('.output').show()
-            showAction(response)
+            showReward();
+            drawAnimation(action);
             }
           });
     }
 
     const options = {
      source: mediaStreamSource,
-     energy_threshold_ratio_pos: 15,
+     energy_threshold_ratio_pos: 5,
      voice_stop: voiceStop, 
      voice_start: voiceStart
     }; 
@@ -220,3 +221,25 @@ function stopAudioCapture() {
     console.log("stopping capture");
     shouldRecord = false
 }
+
+function resetInterface() {
+      $('#starting-screen').show();
+      $('#record-screen').hide();
+      $('#reward-screen').hide();
+}
+
+function showReady() {
+      $('#guide').html("Speak into the mic a command for lucio");
+      $('#starting-screen').hide();
+      $('#record-screen').hide();
+      $('#reward-screen').hide();
+}
+
+
+function showReward() {
+      $('#guide').html("Give treat or bonk lucio");
+      $('#starting-screen').hide();
+      $('#record-screen').hide();
+      $('#reward-screen').show(); 
+}
+
