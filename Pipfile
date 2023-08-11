@@ -4,11 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-torch = "*"
-torchvision = "*"
-flask = "*"
+pygame = "*"
+moviepy = "*"
+pillow = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.9"
+python_version = "3.7"

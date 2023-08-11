@@ -1,0 +1,139 @@
+body {
+  font-family: system-ui;
+}
+
+button {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  outline: none;
+}
+
+.header {
+  background-color: #ad6525;
+  width: 100%;
+  height: 60px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+
+}
+
+.title {
+  color: white;
+	text-align: center;
+}
+
+
+
+.main {
+  width: 100%;
+  height: 460px;
+  position: absolute;
+  top: 60px;
+  left: 0;
+  background-color: #ad6525;
+}
+
+#canvas {
+  display: block;
+  margin: 0 auto; 
+}
+
+#guide {
+  position: absolute;
+  top: 520px;
+  left: 0px;
+  width: 100%;
+  height: 20px;
+  text-align: center;
+  border-top: solid black 1px;
+  border-bottom: solid black 1px;
+}
+
+.interface {
+  position: absolute;
+  top: 540px;
+  width: 100%;
+  bottom: 0px;
+  left: 0px;
+}
+
+
+#starting-screen {
+  display: flex;
+  justify-content: center; /* horizontally center the content */
+  align-items: center; /* vertically center the content */
+  height: 100%; /* set the height of the container to the height of the viewport */
+}
+
+#record-screen {
+  display: flex;
+  justify-content: center; /* horizontally center the content */
+  align-items: center; /* vertically center the content */
+  height: 100%; /* set the height of the container to the height of the viewport */
+  background-color: green;
+  color: white;
+}
+
+#reward-screen {
+  display: flex;
+  justify-content: center; /* horizontally center the content */
+  align-items: center; /* vertically center the content */
+  height: 100%; /* set the height of the container to the height of the viewport */
+}
+
+.reward-btn {
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.command-input {
+  position: absolute;
+  top: 540px;
+  width: 100%;
+	display: block;
+  margin: 2%;
+  width: 95%;
+  font-size: 18px;
+}
+
+.lucio-img {
+  display: block;
+  margin: 0 auto;
+  height: 40vh;
+  width: 40vh;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.output {
+  display: flex;
+}
+
+.green-button {
+  background-color: darkgreen; 
+  color: white; 
+  margin-left: 2%; 
+  margin-right: 1%; 
+  border: none; 
+  width: 47%;
+  height: 48px;
+}
+
+.red-button {
+  background-color: #ba1d22; 
+  color: white; 
+  margin-right: 2%; 
+  margin-left: 1%; 
+  border: none;
+  width: 47%;
+  height: 48px;
+}

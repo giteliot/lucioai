@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LucioAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1 class="title">LucioAI</h1>
+    </div>
+    <div class="main">
+        <canvas id="canvas" width="600px" height="400px"></canvas>
+    </div>
+    <div id="guide">
+        Click the button below to start training lucio with your voice
+    </div>
+    <div class="interface">
+        <div id="starting-screen">
+            <button class="audio-btn" onclick="startListening()"><img height="64px" width="64px" src="{{ url_for('static', filename='images/AUDIO.png') }}" alt="Audio Start"></button>
+        </div>
+        <div id="record-screen">
+            ...recording...
+        </div>
+        <div id="reward-screen">
+            <button onclick="reward(true)" class="reward-btn"><img height="96px" width="96px" src="{{ url_for('static', filename='images/GOOD.png') }}" alt="Audio Start"></button>
+            <button onclick="reward(false)" class="reward-btn"><img height="96px" width="96px" src="{{ url_for('static', filename='images/BAD.png') }}" alt="Audio Start"></button>
+        </div>
+    </div>
+    <!--<h1 class="title">LucioAI</h1>
+    <img class="lucio-img" src="{{ url_for('static', filename='images/lucio_base.png') }}" width="300px" height="300px">
+    <input class="command-input" type="text" id="cmd-input" name="input" placeholder="give command to litle lucio" onkeydown="handleKeyDown(event)">
+    <button onclick="startListening()">TRAING</button>
+    <button onclick="stopAudioCapture()">STAHP</button>
+    <div class="output">
+      <button onclick="reward(true)" class="green-button"></button>
+      <button onclick="reward(false)" class="red-button"></button>
+    </div> -->
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/vad.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ui.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</body>
+</html>
