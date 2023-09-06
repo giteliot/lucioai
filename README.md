@@ -1,14 +1,14 @@
 # LucioAI
 Can Deep Learning learn like a dog?
-This is a terrible attempt to create a deep learning training dog "simulator"
+This is a terrible attempt to create a deep learning training dog "simulator".
 
 ### Motivation
-The initial idea is to use soundwaves as inputs for the training, i.e. teach commands to the virtual dog (Lucio) using the microphone on your machine.
-This approach (obviously I would now say, but hindisght is 20/20) failed because of the incredible high that soundwaves representing the same word can have. 
+The initial idea was to use soundwaves as inputs for the training, i.e. teach commands to the virtual dog (Lucio) using the microphone on your machine.
+This approach (obviously I would now say, but hindisght is 20/20) failed because of the high variance that soundwaves representing the same word can have. 
 
-Instead of throwing everything out, I decided to create a dumbed down version (mainly because I already had a cute doggo drawing), where the inputs are submitted via keyboard.
+Instead of throwing everything out, I decided to create a dumbed down version of it (mainly because I already had a cute doggo drawing), where the inputs are submitted via keyboard.
 
-Even in this new version, making the nn learn fast enough to not bore the user to death, while still not making the gradient explode after just a few rounds, was not straightfoward. Maybe this says more about my ml skills than the actual difficult of the problem.
+Even in this new version, making the nn learn fast enough to not bore the user to death, while still not making the gradient explode after just a few rounds, was not straightfoward. Maybe this says more about my ml skills than the actual difficult of the problem. though.
 
 ### Disclaimer
 Code is spaghetti.
