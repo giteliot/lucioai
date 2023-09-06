@@ -1,5 +1,5 @@
 # LucioAI
-Can Deep Learning learn like a dog?
+Can a neural network learn like a dog?
 This is a terrible attempt to create a deep learning training dog "simulator".
 
 ### Motivation
